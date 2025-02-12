@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { Suspense } from "react";
+import { QueryProvider } from "@/config/query-provider";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ModalManager } from "@/components/modal/modal-manager";
+import Navbar from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,10 +18,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <Navbar />
+        <Suspense>
+          <QueryProvider>
+            <NuqsAdapter>
+              <ModalManager />
+              {children}
+            </NuqsAdapter>
+          </QueryProvider>
+        </Suspense>
       </body>
     </html>
   );
